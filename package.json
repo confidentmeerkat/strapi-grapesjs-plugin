@@ -1,25 +1,26 @@
 {
-  "name": "grapesjs-editor",
+  "name": "strapi-grapesjs-plugin",
   "version": "0.0.0",
-  "description": "This is the description of the plugin.",
+  "description": "A Strapi plugin for GrapesJS webpage builder custom field.",
   "strapi": {
-    "name": "grapesjs-editor",
-    "description": "Description of Grapesjs Editor plugin",
+    "name": "strapi-grapesjs-plugin",
+    "description": "A Strapi plugin for GrapesJS webpage builder custom field.",
     "kind": "plugin",
-    "displayName": "Grapesjs Editor"
+    "displayName": "Grapesjs Plugin"
   },
   "dependencies": {
     "grapesjs": "^0.20.1",
     "grapesjs-blocks-basic": "^1.0.1",
     "grapesjs-preset-webpage": "^1.0.2",
-    "react": "^18.2.0"
+    "react": "^18.2.0",
+    "strapi-grapesjs-plugin": "^0.0.0"
   },
   "author": {
-    "name": "A Strapi developer"
+    "name": "Confident meerkat"
   },
   "maintainers": [
     {
-      "name": "A Strapi developer"
+      "name": "Confident meerkat"
     }
   ],
   "engines": {
