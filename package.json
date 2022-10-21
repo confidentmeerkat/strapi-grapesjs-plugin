@@ -1,6 +1,6 @@
 {
   "name": "strapi-grapesjs-plugin",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "A Strapi plugin for GrapesJS webpage builder custom field.",
   "strapi": {
     "name": "strapi-grapesjs-plugin",
