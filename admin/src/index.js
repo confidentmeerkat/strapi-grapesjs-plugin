@@ -40,7 +40,7 @@ export default {
     app.customFields.register({
       name: "GrapesjsEditor",
       type: "json",
-      pluginId: "grapesjs-editor",
+      pluginId: "strapi-grapesjs-plugin",
       icon: () => <span>GrapesJS</span>,
       intlLabel: {
         id: "grapesjsEditor.label",

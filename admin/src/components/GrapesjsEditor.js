@@ -22,21 +22,21 @@ const GrapesjsEditor = ({
   labelAction,
   intlLabel,
 } = {}) => {
+  const parsedValue = JSON.parse(value);
   const [editor, setEditor] = useState();
-  const [html, setHtml] = useState();
-  const [style, setStyle] = useState();
+  const [html, setHtml] = useState(parsedValue.html);
+  const [style, setStyle] = useState(parsedValue.style);
 
   const { formatMessage } = useIntl();
 
   useEffect(() => {
-    const { html, style } = JSON.parse(value);
     const editor = Grapesjs.init({
       container: "#gjs",
       storageManager: false,
       plugins: [plugin, blocksBasic],
       pluginsOpts: [plugin, blocksBasic],
-      components: html,
-      style,
+      components: parsedValue.html,
+      style: parsedValue.style,
     });
 
     setEditor(editor);
