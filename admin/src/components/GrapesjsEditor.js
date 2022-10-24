@@ -11,6 +11,8 @@ import {
 import { Stack } from "@strapi/design-system/Stack";
 import { useIntl } from "react-intl";
 import "grapesjs/dist/css/grapes.min.css";
+import Axios from "axios";
+import FormData from "form-data";
 
 const GrapesjsEditor = ({
   value = JSON.stringify({}),
@@ -23,7 +25,7 @@ const GrapesjsEditor = ({
   intlLabel,
 } = {}) => {
   const parsedValue = JSON.parse(value);
-  const [editor, setEditor] = useState();
+
   const [html, setHtml] = useState(parsedValue.html);
   const [style, setStyle] = useState(parsedValue.style);
 
@@ -37,31 +39,48 @@ const GrapesjsEditor = ({
       pluginsOpts: [plugin, blocksBasic],
       components: parsedValue.html,
       style: parsedValue.style,
+      assetManager: {
+        upload: "/api/upload",
+        uploadName: "files",
+        async uploadFile(event) {
+          const formData = new FormData();
+          for (let file of event.target.files) {
+            formData.append("files", file);
+          }
+          this.em.trigger("asset:upload:start");
+
+          const { data } = await Axios.post("/api/upload", formData, {
+            headers: { "Content-Type": "multipart/form-data" },
+          });
+
+          this.em.trigger("asset:upload:response", {
+            data: data.map(({ url }) => url),
+          });
+
+          return "success";
+        },
+      },
     });
 
-    setEditor(editor);
-  }, []);
+    editor.on("asset:upload:response", (response) => {
+      editor.AssetManager.add(response.data);
+    });
 
-  useEffect(() => {
-    if (editor) {
-      editor.on("update", () => {
-        setHtml(editor.getHtml());
-        setStyle(editor.getCss());
-      });
-    }
+    editor.on("update", () => {
+      setHtml(editor.getHtml());
+      setStyle(editor.getCss());
+    });
 
     return function cleanup() {
-      if (editor) {
-        const index = Grapesjs.editors.findIndex(
-          (e) => e.Config.container === editor.Config.container
-        );
-        if (typeof index === "number" && index >= 0) {
-          Grapesjs.editors.splice(index, 1);
-        }
-        editor.destroy();
+      const index = Grapesjs.editors.findIndex(
+        (e) => e.Config.container === editor.Config.container
+      );
+      if (typeof index === "number" && index >= 0) {
+        Grapesjs.editors.splice(index, 1);
       }
+      editor.destroy();
     };
-  }, [editor]);
+  }, []);
 
   useEffect(() => {
     onChange({ target: { name, value: JSON.stringify({ html, style }) } });
