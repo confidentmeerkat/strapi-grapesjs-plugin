@@ -13,6 +13,7 @@ import { useIntl } from "react-intl";
 import "grapesjs/dist/css/grapes.min.css";
 import Axios from "axios";
 import FormData from "form-data";
+import de from "grapesjs/locale/de";
 
 const GrapesjsEditor = ({
   value = JSON.stringify({}),
@@ -30,6 +31,7 @@ const GrapesjsEditor = ({
   const [style, setStyle] = useState(parsedValue.style);
 
   const { formatMessage } = useIntl();
+
 
   useEffect(() => {
     const editor = Grapesjs.init({
@@ -60,7 +62,16 @@ const GrapesjsEditor = ({
           return "success";
         },
       },
+      i18n: {},
     });
+
+    editor.I18n.addMessages({ de });
+    editor.I18n.setLocale(
+      window.localStorage.getItem("strapi-admin-language") ||
+        window.navigator.language ||
+        window.navigator.userLanguage ||
+        "en"
+    );
 
     editor.on("asset:upload:response", (response) => {
       editor.AssetManager.add(response.data);
